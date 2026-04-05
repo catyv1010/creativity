@@ -5,249 +5,317 @@ import { useRef, useState } from "react";
 
 const CATEGORIES = ["Todos", "Negocios", "Educación", "Creativo", "Portfolio"];
 
-const TEMPLATES = [
-  {
-    name: "Pitch Deck",
-    category: "Negocios",
-    badge: "Popular",
-    badgeColor: "#c084fc",
-    accent: "#c084fc",
-    bg: "linear-gradient(135deg, #0d0020 0%, #1a0040 100%)",
-    preview: (
-      <svg viewBox="0 0 320 200" className="w-full h-full">
-        {/* Background */}
-        <rect width="320" height="200" fill="url(#pitchBg)" />
-        <defs>
-          <linearGradient id="pitchBg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#0d0020" />
-            <stop offset="100%" stopColor="#1a0040" />
-          </linearGradient>
-        </defs>
-        {/* Orb */}
-        <circle cx="260" cy="40" r="60" fill="#c084fc" opacity="0.08" />
-        {/* Logo box */}
-        <rect x="20" y="20" width="28" height="28" rx="6" fill="#c084fc" opacity="0.9" />
-        <text x="34" y="38" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">C</text>
-        {/* Title */}
-        <rect x="20" y="65" width="160" height="12" rx="3" fill="#c084fc" opacity="0.9" />
-        <rect x="20" y="84" width="120" height="8" rx="2" fill="white" opacity="0.25" />
-        <rect x="20" y="98" width="90" height="8" rx="2" fill="white" opacity="0.15" />
-        {/* Chart bars */}
-        <rect x="20" y="145" width="18" height="38" rx="3" fill="#c084fc" opacity="0.7" />
-        <rect x="44" y="130" width="18" height="53" rx="3" fill="#818cf8" opacity="0.7" />
-        <rect x="68" y="118" width="18" height="65" rx="3" fill="#38bdf8" opacity="0.7" />
-        <rect x="92" y="122" width="18" height="61" rx="3" fill="#34d399" opacity="0.7" />
-        <rect x="116" y="108" width="18" height="75" rx="3" fill="#c084fc" opacity="0.9" />
-        {/* Stats */}
-        <rect x="160" y="130" width="60" height="30" rx="6" fill="white" opacity="0.04" />
-        <text x="190" y="147" textAnchor="middle" fill="#c084fc" fontSize="10" fontWeight="bold">+128%</text>
-        <rect x="228" y="130" width="60" height="30" rx="6" fill="white" opacity="0.04" />
-        <text x="258" y="147" textAnchor="middle" fill="#34d399" fontSize="10" fontWeight="bold">$2.4M</text>
-        {/* Dots */}
-        <circle cx="160" cy="108" r="3" fill="#c084fc" opacity="0.6" />
-        <circle cx="200" cy="95" r="3" fill="#818cf8" opacity="0.6" />
-        <circle cx="240" cy="85" r="3" fill="#38bdf8" opacity="0.6" />
-        <path d="M 160 108 Q 200 95 240 85" stroke="#c084fc" strokeWidth="1" fill="none" opacity="0.4" strokeDasharray="4 2" />
-      </svg>
-    ),
-  },
-  {
-    name: "Neon Cyberpunk",
-    category: "Creativo",
-    badge: "Futurista",
-    badgeColor: "#06b6d4",
-    accent: "#06b6d4",
-    bg: "linear-gradient(135deg, #000a1a 0%, #001020 100%)",
-    preview: (
-      <svg viewBox="0 0 320 200" className="w-full h-full">
-        <defs>
-          <linearGradient id="neonBg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#000a1a" />
-            <stop offset="100%" stopColor="#001020" />
-          </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="blur" />
-            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-        </defs>
-        <rect width="320" height="200" fill="url(#neonBg)" />
-        {/* Grid lines */}
-        {[40, 80, 120, 160, 200, 240, 280].map(x => <line key={x} x1={x} y1="0" x2={x} y2="200" stroke="#06b6d4" strokeWidth="0.3" opacity="0.15" />)}
-        {[40, 80, 120, 160].map(y => <line key={y} x1="0" y1={y} x2="320" y2={y} stroke="#06b6d4" strokeWidth="0.3" opacity="0.15" />)}
-        {/* Neon title */}
-        <rect x="20" y="30" width="200" height="18" rx="2" fill="#06b6d4" opacity="0.9" filter="url(#glow)" />
-        <rect x="20" y="55" width="140" height="10" rx="2" fill="#ec4899" opacity="0.7" filter="url(#glow)" />
-        {/* Glowing boxes */}
-        <rect x="20" y="90" width="80" height="60" rx="4" fill="none" stroke="#06b6d4" strokeWidth="1.5" opacity="0.8" />
-        <rect x="25" y="95" width="20" height="12" rx="2" fill="#06b6d4" opacity="0.6" />
-        <rect x="25" y="113" width="60" height="5" rx="1" fill="white" opacity="0.15" />
-        <rect x="25" y="123" width="45" height="5" rx="1" fill="white" opacity="0.1" />
-        <rect x="115" y="90" width="80" height="60" rx="4" fill="none" stroke="#ec4899" strokeWidth="1.5" opacity="0.8" />
-        <circle cx="155" cy="120" r="18" fill="none" stroke="#ec4899" strokeWidth="1.5" opacity="0.7" />
-        <circle cx="155" cy="120" r="8" fill="#ec4899" opacity="0.4" />
-        <rect x="210" y="90" width="80" height="60" rx="4" fill="none" stroke="#a855f7" strokeWidth="1.5" opacity="0.8" />
-        <path d="M 215 145 L 230 115 L 245 130 L 265 105 L 285 120" stroke="#a855f7" strokeWidth="1.5" fill="none" opacity="0.8" />
-        {/* Bottom bar */}
-        <rect x="20" y="165" width="280" height="2" rx="1" fill="#06b6d4" opacity="0.3" />
-        <rect x="20" y="165" width="120" height="2" rx="1" fill="#06b6d4" opacity="0.9" filter="url(#glow)" />
-      </svg>
-    ),
-  },
-  {
-    name: "Educación Moderna",
-    category: "Educación",
-    badge: "Nuevo",
-    badgeColor: "#34d399",
-    accent: "#34d399",
-    bg: "linear-gradient(135deg, #001510 0%, #001a15 100%)",
-    preview: (
-      <svg viewBox="0 0 320 200" className="w-full h-full">
-        <defs>
-          <linearGradient id="eduBg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#001510" />
-            <stop offset="100%" stopColor="#001a15" />
-          </linearGradient>
-        </defs>
-        <rect width="320" height="200" fill="url(#eduBg)" />
-        <circle cx="280" cy="30" r="50" fill="#34d399" opacity="0.06" />
-        {/* Header */}
-        <rect x="20" y="20" width="8" height="40" rx="2" fill="#34d399" opacity="0.9" />
-        <rect x="35" y="25" width="140" height="12" rx="3" fill="white" opacity="0.85" />
-        <rect x="35" y="43" width="100" height="8" rx="2" fill="#34d399" opacity="0.6" />
-        {/* Content cards */}
-        <rect x="20" y="80" width="85" height="100" rx="8" fill="white" opacity="0.04" />
-        <rect x="28" y="90" width="30" height="30" rx="6" fill="#34d399" opacity="0.2" />
-        <text x="43" y="111" textAnchor="middle" fill="#34d399" fontSize="14">📐</text>
-        <rect x="28" y="128" width="60" height="6" rx="2" fill="white" opacity="0.3" />
-        <rect x="28" y="140" width="45" height="5" rx="2" fill="white" opacity="0.15" />
-        <rect x="28" y="152" width="50" height="5" rx="2" fill="white" opacity="0.1" />
-        <rect x="115" y="80" width="85" height="100" rx="8" fill="white" opacity="0.04" />
-        <rect x="123" y="90" width="30" height="30" rx="6" fill="#38bdf8" opacity="0.2" />
-        <text x="138" y="111" textAnchor="middle" fill="#38bdf8" fontSize="14">🧬</text>
-        <rect x="123" y="128" width="60" height="6" rx="2" fill="white" opacity="0.3" />
-        <rect x="123" y="140" width="45" height="5" rx="2" fill="white" opacity="0.15" />
-        <rect x="123" y="152" width="50" height="5" rx="2" fill="white" opacity="0.1" />
-        <rect x="210" y="80" width="85" height="100" rx="8" fill="white" opacity="0.04" />
-        <rect x="218" y="90" width="30" height="30" rx="6" fill="#c084fc" opacity="0.2" />
-        <text x="233" y="111" textAnchor="middle" fill="#c084fc" fontSize="14">🔭</text>
-        <rect x="218" y="128" width="60" height="6" rx="2" fill="white" opacity="0.3" />
-        <rect x="218" y="140" width="45" height="5" rx="2" fill="white" opacity="0.15" />
-        <rect x="218" y="152" width="50" height="5" rx="2" fill="white" opacity="0.1" />
-        {/* Progress bar */}
-        <rect x="20" y="60" width="280" height="4" rx="2" fill="white" opacity="0.05" />
-        <rect x="20" y="60" width="180" height="4" rx="2" fill="#34d399" opacity="0.7" />
-        <text x="204" y="65" fill="#34d399" fontSize="8" opacity="0.9">64%</text>
-      </svg>
-    ),
-  },
-  {
-    name: "Portfolio Artista",
-    category: "Portfolio",
-    badge: "Premium",
-    badgeColor: "#f472b6",
-    accent: "#f472b6",
-    bg: "linear-gradient(135deg, #1a0010 0%, #2d0020 100%)",
-    preview: (
-      <svg viewBox="0 0 320 200" className="w-full h-full">
-        <defs>
-          <linearGradient id="portBg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#1a0010" />
-            <stop offset="100%" stopColor="#2d0020" />
-          </linearGradient>
-          <linearGradient id="imgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#f472b6" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#c084fc" stopOpacity="0.3" />
-          </linearGradient>
-        </defs>
-        <rect width="320" height="200" fill="url(#portBg)" />
-        {/* Large image hero */}
-        <rect x="20" y="20" width="185" height="160" rx="10" fill="url(#imgGrad)" />
-        <circle cx="112" cy="100" r="35" fill="#f472b6" opacity="0.15" />
-        <circle cx="112" cy="100" r="20" fill="#f472b6" opacity="0.2" />
-        <text x="112" y="107" textAnchor="middle" fill="#f472b6" fontSize="18">✦</text>
-        {/* Sidebar */}
-        <rect x="215" y="20" width="85" height="45" rx="8" fill="white" opacity="0.03" />
-        <rect x="223" y="28" width="50" height="7" rx="2" fill="white" opacity="0.6" />
-        <rect x="223" y="40" width="35" height="5" rx="2" fill="#f472b6" opacity="0.7" />
-        <rect x="215" y="75" width="85" height="45" rx="8" fill="white" opacity="0.03" />
-        <rect x="223" y="83" width="50" height="7" rx="2" fill="white" opacity="0.4" />
-        <rect x="223" y="95" width="35" height="5" rx="2" fill="white" opacity="0.2" />
-        <rect x="215" y="130" width="85" height="45" rx="8" fill="#f472b6" opacity="0.08" />
-        <rect x="223" y="142" width="60" height="7" rx="3" fill="#f472b6" opacity="0.8" />
-        <text x="237" y="168" fill="#f472b6" fontSize="8" opacity="0.7">Ver Portfolio →</text>
-        {/* Tags */}
-        <rect x="20" y="188" width="55" height="0" />
-      </svg>
-    ),
-  },
-  {
-    name: "Startup Launch",
-    category: "Negocios",
-    badge: "Hot",
-    badgeColor: "#fb923c",
-    accent: "#fb923c",
-    bg: "linear-gradient(135deg, #0f0800 0%, #1a0e00 100%)",
-    preview: (
-      <svg viewBox="0 0 320 200" className="w-full h-full">
-        <defs>
-          <linearGradient id="startBg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#0f0800" />
-            <stop offset="100%" stopColor="#1a0e00" />
-          </linearGradient>
-        </defs>
-        <rect width="320" height="200" fill="url(#startBg)" />
-        <circle cx="160" cy="200" r="100" fill="#fb923c" opacity="0.06" />
-        {/* Rocket icon */}
-        <text x="160" y="75" textAnchor="middle" fill="#fb923c" fontSize="36" opacity="0.9">🚀</text>
-        {/* Title */}
-        <rect x="60" y="90" width="200" height="16" rx="4" fill="#fb923c" opacity="0.9" />
-        <rect x="80" y="113" width="160" height="10" rx="3" fill="white" opacity="0.3" />
-        <rect x="100" y="130" width="120" height="8" rx="2" fill="white" opacity="0.15" />
-        {/* CTA button */}
-        <rect x="90" y="150" width="140" height="32" rx="16" fill="#fb923c" opacity="0.9" />
-        <text x="160" y="170" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">Lanzar Ahora →</text>
-        {/* Stars */}
-        {[[50, 30], [270, 50], [290, 150], [30, 160], [150, 20]].map(([x, y], i) => (
-          <circle key={i} cx={x} cy={y} r="1.5" fill="#fb923c" opacity="0.4" />
+/* ─── Animated Preview Components ─────────────────────────── */
+
+function PreviewPitchDeck() {
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: "linear-gradient(135deg, #0d0020 0%, #1a0040 100%)" }}>
+      {/* Moving orbs */}
+      <motion.div className="absolute rounded-full"
+        style={{ width: 180, height: 180, top: -40, right: -40, background: "radial-gradient(circle, rgba(192,132,252,0.35) 0%, transparent 70%)" }}
+        animate={{ scale: [1, 1.3, 1], x: [0, 20, 0], y: [0, 15, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} />
+      <motion.div className="absolute rounded-full"
+        style={{ width: 120, height: 120, bottom: 10, left: 10, background: "radial-gradient(circle, rgba(56,189,248,0.25) 0%, transparent 70%)" }}
+        animate={{ scale: [1, 1.5, 1], x: [0, -15, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
+
+      {/* Animated bar chart */}
+      <div className="absolute bottom-8 left-5 flex items-end gap-2">
+        {[38, 55, 72, 65, 85].map((h, i) => (
+          <motion.div key={i} className="w-5 rounded-t-sm"
+            style={{ background: ["#c084fc", "#818cf8", "#38bdf8", "#34d399", "#c084fc"][i], opacity: 0.85 }}
+            initial={{ height: 0 }}
+            animate={{ height: h }}
+            transition={{ duration: 1, delay: 0.3 + i * 0.15, ease: "backOut", repeat: Infinity, repeatDelay: 3, repeatType: "reverse" }} />
         ))}
-      </svg>
-    ),
-  },
-  {
-    name: "Minimalista Pro",
-    category: "Creativo",
-    badge: "Elegante",
-    badgeColor: "#818cf8",
-    accent: "#818cf8",
-    bg: "linear-gradient(135deg, #08081a 0%, #0d0d20 100%)",
-    preview: (
-      <svg viewBox="0 0 320 200" className="w-full h-full">
-        <defs>
-          <linearGradient id="miniBg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#08081a" />
-            <stop offset="100%" stopColor="#0d0d20" />
-          </linearGradient>
-        </defs>
-        <rect width="320" height="200" fill="url(#miniBg)" />
-        {/* Thin lines */}
-        <line x1="40" y1="0" x2="40" y2="200" stroke="#818cf8" strokeWidth="0.5" opacity="0.1" />
-        <line x1="280" y1="0" x2="280" y2="200" stroke="#818cf8" strokeWidth="0.5" opacity="0.1" />
-        {/* Giant letter */}
-        <text x="160" y="130" textAnchor="middle" fill="#818cf8" fontSize="100" opacity="0.06" fontWeight="900">M</text>
-        {/* Content */}
-        <rect x="55" y="50" width="210" height="3" rx="1" fill="white" opacity="0.7" />
-        <rect x="55" y="62" width="160" height="2" rx="1" fill="white" opacity="0.3" />
-        <rect x="55" y="78" width="1" height="80" fill="#818cf8" opacity="0.8" />
-        <rect x="65" y="85" width="180" height="9" rx="2" fill="white" opacity="0.2" />
-        <rect x="65" y="100" width="140" height="7" rx="2" fill="white" opacity="0.12" />
-        <rect x="65" y="115" width="160" height="7" rx="2" fill="white" opacity="0.1" />
-        <rect x="65" y="130" width="120" height="7" rx="2" fill="white" opacity="0.08" />
-        {/* Small accent */}
-        <circle cx="270" cy="170" r="20" fill="none" stroke="#818cf8" strokeWidth="0.8" opacity="0.4" />
-        <circle cx="270" cy="170" r="12" fill="#818cf8" opacity="0.08" />
-      </svg>
-    ),
-  },
+      </div>
+
+      {/* Floating line */}
+      <motion.div className="absolute top-8 left-5 h-px"
+        style={{ background: "linear-gradient(90deg, #c084fc, transparent)", width: 120 }}
+        animate={{ width: [60, 140, 60], opacity: [0.4, 0.9, 0.4] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} />
+      <div className="absolute top-12 left-5 h-px w-20 opacity-30" style={{ background: "#818cf8" }} />
+
+      {/* Stat boxes */}
+      <motion.div className="absolute top-7 right-5 px-3 py-1.5 rounded-lg text-[10px] font-bold"
+        style={{ background: "rgba(192,132,252,0.15)", border: "1px solid rgba(192,132,252,0.3)", color: "#c084fc" }}
+        animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 3, repeat: Infinity }}>
+        +128%
+      </motion.div>
+
+      {/* Floating particles */}
+      {[{ x: "20%", y: "40%", c: "#c084fc" }, { x: "70%", y: "60%", c: "#38bdf8" }, { x: "45%", y: "25%", c: "#34d399" }].map((p, i) => (
+        <motion.div key={i} className="absolute w-1 h-1 rounded-full"
+          style={{ left: p.x, top: p.y, background: p.c }}
+          animate={{ y: [0, -12, 0], opacity: [0.3, 0.9, 0.3], scale: [1, 1.8, 1] }}
+          transition={{ duration: 2.5 + i * 0.7, repeat: Infinity, delay: i * 0.5 }} />
+      ))}
+    </div>
+  );
+}
+
+function PreviewNeonCyberpunk() {
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: "linear-gradient(135deg, #000a1a 0%, #001020 100%)" }}>
+      {/* Scanline effect */}
+      <motion.div className="absolute inset-0 pointer-events-none"
+        style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(6,182,212,0.03) 3px, rgba(6,182,212,0.03) 4px)" }} />
+
+      {/* Animated grid lines */}
+      {[0, 1, 2, 3].map(i => (
+        <motion.div key={i} className="absolute top-0 bottom-0 w-px"
+          style={{ left: `${20 + i * 22}%`, background: "rgba(6,182,212,0.2)" }}
+          animate={{ opacity: [0.1, 0.5, 0.1] }}
+          transition={{ duration: 2, repeat: Infinity, delay: i * 0.4 }} />
+      ))}
+      {[0, 1, 2].map(i => (
+        <motion.div key={i} className="absolute left-0 right-0 h-px"
+          style={{ top: `${25 + i * 25}%`, background: "rgba(6,182,212,0.2)" }}
+          animate={{ opacity: [0.1, 0.4, 0.1] }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.6 }} />
+      ))}
+
+      {/* Neon title bar */}
+      <motion.div className="absolute top-6 left-5 h-3 rounded"
+        style={{ background: "#06b6d4", boxShadow: "0 0 12px #06b6d4, 0 0 24px rgba(6,182,212,0.5)" }}
+        animate={{ width: [80, 140, 80] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
+      <motion.div className="absolute top-12 left-5 h-2 rounded"
+        style={{ background: "#ec4899", boxShadow: "0 0 8px #ec4899" }}
+        animate={{ width: [50, 110, 50] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} />
+
+      {/* Glowing corner boxes */}
+      {[
+        { x: 10, y: 45, c: "#06b6d4" },
+        { x: 105, y: 45, c: "#ec4899" },
+        { x: 210, y: 45, c: "#a855f7" },
+      ].map((b, i) => (
+        <motion.div key={i} className="absolute rounded"
+          style={{ left: b.x, top: b.y, width: 80, height: 70, border: `1px solid ${b.c}`, boxShadow: `0 0 10px ${b.c}40` }}
+          animate={{ boxShadow: [`0 0 6px ${b.c}30`, `0 0 18px ${b.c}80`, `0 0 6px ${b.c}30`] }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.6 }} />
+      ))}
+
+      {/* Moving data line */}
+      <motion.svg className="absolute bottom-6 left-5" width="280" height="30" viewBox="0 0 280 30">
+        <motion.path d="M 0 20 Q 50 5 100 18 T 200 12 T 280 20"
+          fill="none" stroke="#06b6d4" strokeWidth="1.5" opacity="0.7"
+          strokeDasharray="280"
+          animate={{ strokeDashoffset: [280, 0, -280] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }} />
+      </motion.svg>
+    </div>
+  );
+}
+
+function PreviewEducacion() {
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: "linear-gradient(135deg, #001510 0%, #001a15 100%)" }}>
+      {/* Floating orb */}
+      <motion.div className="absolute rounded-full"
+        style={{ width: 200, height: 200, top: -60, right: -60, background: "radial-gradient(circle, rgba(52,211,153,0.2) 0%, transparent 70%)" }}
+        animate={{ scale: [1, 1.2, 1], rotate: [0, 360] }}
+        transition={{ scale: { duration: 6, repeat: Infinity }, rotate: { duration: 20, repeat: Infinity, ease: "linear" } }} />
+
+      {/* Progress bar animated */}
+      <div className="absolute top-8 left-5 right-5">
+        <div className="text-[9px] font-bold mb-1" style={{ color: "rgba(52,211,153,0.7)" }}>Progreso del curso</div>
+        <div className="h-2 rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
+          <motion.div className="h-full rounded-full" style={{ background: "linear-gradient(90deg, #34d399, #06b6d4)" }}
+            animate={{ width: ["20%", "75%", "20%"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} />
+        </div>
+      </div>
+
+      {/* Floating subject cards */}
+      {[
+        { top: 55, left: 8, emoji: "📐", label: "Álgebra", c: "#34d399", delay: 0 },
+        { top: 55, left: 108, emoji: "🧬", label: "Biología", c: "#38bdf8", delay: 0.3 },
+        { top: 55, left: 208, emoji: "🔭", label: "Física", c: "#c084fc", delay: 0.6 },
+      ].map((card, i) => (
+        <motion.div key={i} className="absolute rounded-lg flex flex-col items-center justify-center gap-1"
+          style={{ top: card.top, left: card.left, width: 88, height: 90, background: "rgba(255,255,255,0.03)", border: `1px solid ${card.c}25` }}
+          animate={{ y: [0, -6, 0], borderColor: [`${card.c}25`, `${card.c}60`, `${card.c}25`] }}
+          transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay: card.delay }}>
+          <span style={{ fontSize: 22 }}>{card.emoji}</span>
+          <span className="text-[9px] font-semibold" style={{ color: card.c }}>{card.label}</span>
+        </motion.div>
+      ))}
+
+      {/* Stars / achievement */}
+      <motion.div className="absolute bottom-5 right-5 flex gap-1"
+        animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }}>
+        {["★", "★", "★"].map((s, i) => (
+          <span key={i} style={{ color: "#fbbf24", fontSize: 14, textShadow: "0 0 8px #fbbf24" }}>{s}</span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+function PreviewPortfolio() {
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: "linear-gradient(135deg, #1a0010 0%, #2d0020 100%)" }}>
+      {/* Shifting gradient wash */}
+      <motion.div className="absolute inset-0"
+        animate={{ background: [
+          "radial-gradient(ellipse at 30% 40%, rgba(244,114,182,0.2) 0%, transparent 60%)",
+          "radial-gradient(ellipse at 70% 60%, rgba(192,132,252,0.2) 0%, transparent 60%)",
+          "radial-gradient(ellipse at 30% 40%, rgba(244,114,182,0.2) 0%, transparent 60%)",
+        ]}}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
+
+      {/* Artwork frame */}
+      <motion.div className="absolute rounded-xl overflow-hidden"
+        style={{ top: 12, left: 12, width: 160, height: 145, background: "rgba(244,114,182,0.07)", border: "1px solid rgba(244,114,182,0.2)" }}
+        animate={{ borderColor: ["rgba(244,114,182,0.2)", "rgba(244,114,182,0.5)", "rgba(244,114,182,0.2)"] }}
+        transition={{ duration: 4, repeat: Infinity }}>
+        {/* Abstract art inside */}
+        <motion.div className="absolute rounded-full"
+          style={{ width: 80, height: 80, top: "50%", left: "50%", transform: "translate(-50%,-50%)", background: "radial-gradient(circle, rgba(244,114,182,0.4) 0%, rgba(192,132,252,0.2) 50%, transparent 70%)" }}
+          animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }} />
+        <motion.div className="absolute inset-0 flex items-center justify-center text-3xl"
+          animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 3, repeat: Infinity }}>
+          ✦
+        </motion.div>
+      </motion.div>
+
+      {/* Sidebar tags */}
+      <div className="absolute top-12 right-5 flex flex-col gap-2">
+        {[
+          { label: "UI Design", c: "#f472b6" },
+          { label: "Branding", c: "#c084fc" },
+          { label: "Motion", c: "#818cf8" },
+        ].map((t, i) => (
+          <motion.div key={i} className="px-2 py-1 rounded text-[9px] font-bold"
+            style={{ background: `${t.c}15`, border: `1px solid ${t.c}30`, color: t.c }}
+            animate={{ opacity: [0.5, 1, 0.5], x: [0, 3, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4 }}>
+            {t.label}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Bottom CTA */}
+      <motion.div className="absolute bottom-6 right-5 px-3 py-1.5 rounded-full text-[10px] font-bold"
+        style={{ background: "#f472b6", color: "#fff", boxShadow: "0 0 12px rgba(244,114,182,0.5)" }}
+        animate={{ boxShadow: ["0 0 8px rgba(244,114,182,0.4)", "0 0 20px rgba(244,114,182,0.8)", "0 0 8px rgba(244,114,182,0.4)"] }}
+        transition={{ duration: 2, repeat: Infinity }}>
+        Ver Portfolio →
+      </motion.div>
+    </div>
+  );
+}
+
+function PreviewStartup() {
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: "linear-gradient(135deg, #0f0800 0%, #1a0e00 100%)" }}>
+      {/* Radial burst from center */}
+      <motion.div className="absolute rounded-full"
+        style={{ width: 300, height: 300, top: "50%", left: "50%", transform: "translate(-50%,-50%)", background: "radial-gradient(circle, rgba(251,146,60,0.12) 0%, transparent 70%)" }}
+        animate={{ scale: [0.8, 1.4, 0.8] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} />
+
+      {/* Rocket with trail */}
+      <motion.div className="absolute text-4xl select-none"
+        style={{ left: "50%", top: "30%", transform: "translateX(-50%)" }}
+        animate={{ y: [0, -15, 0], filter: ["drop-shadow(0 0 0px #fb923c)", "drop-shadow(0 0 16px #fb923c)", "drop-shadow(0 0 0px #fb923c)"] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
+        🚀
+      </motion.div>
+
+      {/* Particle trail */}
+      {[0, 1, 2, 3, 4, 5].map(i => (
+        <motion.div key={i} className="absolute rounded-full"
+          style={{
+            width: 3 + i * 0.5, height: 3 + i * 0.5,
+            left: `${42 + (i % 3) * 5}%`,
+            top: `${55 + i * 5}%`,
+            background: ["#fb923c", "#fbbf24", "#f472b6"][i % 3],
+          }}
+          animate={{ y: [0, 20, 0], opacity: [0.8, 0, 0.8], scale: [1, 0.2, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }} />
+      ))}
+
+      {/* CTA */}
+      <motion.div className="absolute bottom-7 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full text-[11px] font-bold whitespace-nowrap"
+        style={{ background: "#fb923c", color: "#000", boxShadow: "0 0 20px rgba(251,146,60,0.6)" }}
+        animate={{ scale: [1, 1.04, 1], boxShadow: ["0 0 12px rgba(251,146,60,0.5)", "0 0 28px rgba(251,146,60,0.9)", "0 0 12px rgba(251,146,60,0.5)"] }}
+        transition={{ duration: 2, repeat: Infinity }}>
+        Lanzar Ahora →
+      </motion.div>
+
+      {/* Stars */}
+      {[[15, 15], [82, 25], [88, 70], [8, 75], [50, 8], [25, 88]].map(([x, y], i) => (
+        <motion.div key={i} className="absolute rounded-full w-1.5 h-1.5"
+          style={{ left: `${x}%`, top: `${y}%`, background: "#fb923c" }}
+          animate={{ opacity: [0.2, 0.9, 0.2], scale: [1, 1.8, 1] }}
+          transition={{ duration: 2 + i * 0.3, repeat: Infinity, delay: i * 0.4 }} />
+      ))}
+    </div>
+  );
+}
+
+function PreviewMinimalista() {
+  return (
+    <div className="absolute inset-0 overflow-hidden" style={{ background: "linear-gradient(135deg, #08081a 0%, #0d0d20 100%)" }}>
+      {/* Subtle shifting gradient */}
+      <motion.div className="absolute inset-0"
+        animate={{ background: [
+          "radial-gradient(ellipse at 20% 50%, rgba(129,140,248,0.08) 0%, transparent 60%)",
+          "radial-gradient(ellipse at 80% 50%, rgba(129,140,248,0.12) 0%, transparent 60%)",
+          "radial-gradient(ellipse at 20% 50%, rgba(129,140,248,0.08) 0%, transparent 60%)",
+        ]}}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} />
+
+      {/* Vertical accent line */}
+      <motion.div className="absolute top-6 bottom-6 w-px"
+        style={{ left: 32, background: "#818cf8" }}
+        animate={{ opacity: [0.3, 0.8, 0.3], scaleY: [0.8, 1, 0.8] }}
+        transition={{ duration: 4, repeat: Infinity }} />
+
+      {/* Animated text lines */}
+      {[
+        { w: "55%", y: 28, o: 0.85, c: "#f0e6ff" },
+        { w: "42%", y: 46, o: 0.35, c: "#818cf8" },
+        { w: "65%", y: 72, o: 0.2, c: "#f0e6ff" },
+        { w: "50%", y: 88, o: 0.15, c: "#f0e6ff" },
+        { w: "58%", y: 104, o: 0.12, c: "#f0e6ff" },
+      ].map((l, i) => (
+        <motion.div key={i} className="absolute h-2 rounded-full"
+          style={{ left: 48, top: l.y, width: l.w, background: l.c, opacity: l.o }}
+          animate={{ width: [l.w, `calc(${l.w} + 20px)`, l.w] }}
+          transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }} />
+      ))}
+
+      {/* Large ghost letter */}
+      <motion.div className="absolute font-black select-none pointer-events-none"
+        style={{ fontSize: 110, bottom: -10, right: 10, color: "rgba(129,140,248,0.05)", fontFamily: "var(--font-display)", lineHeight: 1 }}
+        animate={{ opacity: [0.03, 0.08, 0.03] }}
+        transition={{ duration: 5, repeat: Infinity }}>
+        M
+      </motion.div>
+
+      {/* Orbiting circle */}
+      <motion.div className="absolute rounded-full border"
+        style={{ width: 50, height: 50, bottom: 16, right: 16, borderColor: "rgba(129,140,248,0.3)" }}
+        animate={{ rotate: 360, borderColor: ["rgba(129,140,248,0.2)", "rgba(129,140,248,0.6)", "rgba(129,140,248,0.2)"] }}
+        transition={{ rotate: { duration: 12, repeat: Infinity, ease: "linear" }, borderColor: { duration: 3, repeat: Infinity } }} />
+    </div>
+  );
+}
+
+const TEMPLATES = [
+  { name: "Pitch Deck", category: "Negocios", badge: "Popular", badgeColor: "#c084fc", accent: "#c084fc", Preview: PreviewPitchDeck, href: "/cinema-editor" },
+  { name: "Neon Cyberpunk", category: "Creativo", badge: "Futurista", badgeColor: "#06b6d4", accent: "#06b6d4", Preview: PreviewNeonCyberpunk, href: "/cinema-editor" },
+  { name: "Educación Moderna", category: "Educación", badge: "Nuevo", badgeColor: "#34d399", accent: "#34d399", Preview: PreviewEducacion, href: "/cinema-editor" },
+  { name: "Portfolio Artista", category: "Portfolio", badge: "Premium", badgeColor: "#f472b6", accent: "#f472b6", Preview: PreviewPortfolio, href: "/cinema-editor" },
+  { name: "Startup Launch", category: "Negocios", badge: "Hot", badgeColor: "#fb923c", accent: "#fb923c", Preview: PreviewStartup, href: "/cinema-editor" },
+  { name: "Minimalista Pro", category: "Creativo", badge: "Elegante", badgeColor: "#818cf8", accent: "#818cf8", Preview: PreviewMinimalista, href: "/cinema-editor" },
 ];
 
 export default function Templates() {
@@ -284,7 +352,10 @@ export default function Templates() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6"
             style={{ borderColor: "rgba(129,140,248,0.25)", background: "rgba(129,140,248,0.07)", color: "#818cf8" }}>
-            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#818cf8" }} />
+            <motion.div className="w-1.5 h-1.5 rounded-full"
+              style={{ background: "#818cf8" }}
+              animate={{ scale: [1, 1.5, 1], opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 2, repeat: Infinity }} />
             <span className="text-xs font-bold tracking-[0.2em] uppercase">Galería de plantillas</span>
           </div>
 
@@ -298,7 +369,7 @@ export default function Templates() {
             }}>Termina impresionando.</span>
           </h2>
           <p className="text-lg max-w-2xl mx-auto mb-8" style={{ color: "rgba(240,230,255,0.45)" }}>
-            Plantillas diseñadas para cinema-editing. Cada una viene con transiciones, paleta de color y layout de escenas listo para usar.
+            Cada plantilla tiene fondo animado, transiciones y paleta de color lista para usar.
           </p>
 
           {/* Category filters */}
@@ -336,36 +407,37 @@ export default function Templates() {
               onMouseLeave={() => setHovered(null)}
               className="group relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500"
               style={{
-                background: t.bg,
                 border: hovered === i ? `1px solid ${t.accent}50` : "1px solid rgba(255,255,255,0.06)",
                 boxShadow: hovered === i
-                  ? `0 20px 60px ${t.accent}20, 0 0 0 1px ${t.accent}20`
+                  ? `0 20px 60px ${t.accent}25, 0 0 0 1px ${t.accent}20`
                   : "0 4px 24px rgba(0,0,0,0.4)",
                 transform: hovered === i ? "translateY(-8px) scale(1.01)" : "translateY(0) scale(1)",
               }}
             >
-              {/* Preview area */}
+              {/* Animated preview */}
               <div className="aspect-[16/10] relative overflow-hidden">
-                {t.preview}
-                {/* Hover overlay */}
-                <div className="absolute inset-0 flex items-center justify-center transition-all duration-500"
-                  style={{ background: hovered === i ? `${t.accent}15` : "transparent" }}>
-                  <div className="transition-all duration-400"
-                    style={{ opacity: hovered === i ? 1 : 0, transform: hovered === i ? "scale(1)" : "scale(0.8)" }}>
-                    <a
-                      href="/cinema-editor"
-                      className="px-5 py-2.5 rounded-full text-sm font-bold"
-                      style={{ background: t.accent, color: "#000" }}
-                    >
+                <t.Preview />
+                {/* Hover overlay with CTA */}
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center"
+                  animate={{ background: hovered === i ? `rgba(0,0,0,0.45)` : "rgba(0,0,0,0)" }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div
+                    animate={{ opacity: hovered === i ? 1 : 0, scale: hovered === i ? 1 : 0.8, y: hovered === i ? 0 : 10 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <a href={t.href} className="px-5 py-2.5 rounded-full text-sm font-bold inline-block"
+                      style={{ background: t.accent, color: "#000" }}>
                       Usar plantilla →
                     </a>
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
               </div>
 
               {/* Card footer */}
               <div className="px-4 py-3 flex items-center justify-between"
-                style={{ borderTop: `1px solid ${t.accent}15` }}>
+                style={{ borderTop: `1px solid ${t.accent}15`, background: "rgba(3,0,20,0.8)" }}>
                 <div>
                   <div className="font-[var(--font-display)] font-bold text-sm" style={{ color: "#f0e6ff" }}>{t.name}</div>
                   <div className="text-xs mt-0.5" style={{ color: "rgba(240,230,255,0.35)" }}>{t.category}</div>
@@ -386,15 +458,9 @@ export default function Templates() {
           transition={{ delay: 0.6 }}
           className="text-center mt-14"
         >
-          <a
-            href="/cinema-editor"
+          <a href="/cinema-editor"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold transition-all duration-300 hover:-translate-y-1"
-            style={{
-              background: "rgba(129,140,248,0.08)",
-              border: "1px solid rgba(129,140,248,0.25)",
-              color: "#818cf8",
-            }}
-          >
+            style={{ background: "rgba(129,140,248,0.08)", border: "1px solid rgba(129,140,248,0.25)", color: "#818cf8" }}>
             <span>Explorar todas las plantillas</span>
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path d="M5 12h14M12 5l7 7-7 7" />
