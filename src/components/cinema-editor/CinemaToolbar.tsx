@@ -348,14 +348,21 @@ export default function CinemaToolbar({ onOpenTemplates, onOpenMedia }: { onOpen
 
         <Separator />
 
-        {/* Present button */}
-        <button
-          onClick={() => setPresentMode(true)}
-          className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold transition-colors"
-        >
-          <Play size={14} fill="currentColor" />
-          Presentar
-        </button>
+        {/* Present button — pulsing ring when scenes have animations */}
+        <div className="relative">
+          {/* Pulse ring if any scene has animated elements */}
+          {presentation.scenes.some(s => s.elements.some(el => el.animations.length > 0)) && (
+            <span className="absolute -inset-1 rounded-full animate-ping opacity-30 bg-purple-500 pointer-events-none" />
+          )}
+          <button
+            onClick={() => setPresentMode(true)}
+            className="relative flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold transition-colors"
+            title="Ver animaciones y transiciones en modo presentación"
+          >
+            <Play size={14} fill="currentColor" />
+            Presentar
+          </button>
+        </div>
       </div>
     </div>
   );

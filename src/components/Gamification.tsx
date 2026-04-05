@@ -239,18 +239,24 @@ const games = [
     desc: "Desafíos interactivos con pistas ocultas, códigos secretos y efectos de sonido. Ideal para educación y team building.",
     Preview: EscapeRoomPreview,
     accentColor: "#c084fc",
+    href: "/cinema-editor?template=cinematic-opener",
+    cta: "Ver plantilla →",
   },
   {
     title: "Quizzes Interactivos",
     desc: "Preguntas con feedback instantáneo, puntuación en tiempo real, temporizador y tabla de posiciones.",
     Preview: QuizPreview,
     accentColor: "#fbbf24",
+    href: "/cinema-editor?template=pitch-profesional&addQuiz=true",
+    cta: "Agregar quiz →",
   },
   {
     title: "Juegos de Memoria",
     desc: "Tarjetas que se voltean, combos y parejas para encontrar. Perfecto para aprendizaje y engagement.",
     Preview: MemoryPreview,
     accentColor: "#34d399",
+    href: "/cinema-editor?template=parallax-story",
+    cta: "Ver plantilla →",
   },
 ];
 
@@ -321,11 +327,11 @@ export default function Gamification() {
                   <h3 className="font-[var(--font-display)] text-base font-extrabold text-white">{g.title}</h3>
                 </div>
                 <p className="text-white/30 text-sm leading-relaxed">{g.desc}</p>
-                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                  className="mt-4 w-full py-2 rounded-lg text-xs font-bold transition-all"
+                <motion.a href={g.href} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                  className="mt-4 w-full py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center"
                   style={{ background: `${g.accentColor}12`, border: `1px solid ${g.accentColor}25`, color: `${g.accentColor}CC` }}>
-                  Agregar a mi presentación →
-                </motion.button>
+                  {g.cta}
+                </motion.a>
               </div>
             </motion.div>
           ))}

@@ -9,6 +9,7 @@ import { createDefaultPresentation } from "@/core/scene/SceneFactory";
 import { registerGSAPPlugins } from "@/lib/gsap-register";
 import { TEMPLATE_CATALOG } from "@/core/scene/templates";
 import { PREMIUM_TEMPLATE_CATALOG } from "@/core/scene/premium-templates";
+import { createDefaultQuiz } from "@/components/cinema-editor/QuizOverlay";
 import CinemaToolbar from "./CinemaToolbar";
 import CinemaScenePanel from "./CinemaScenePanel";
 import CinemaCanvas from "./CinemaCanvas";
@@ -36,6 +37,7 @@ export default function CinemaEditor() {
     const templateId = params?.get("template");
 
     if (isNew) {
+      setActiveScene("__reset__"); // force stale-ID clear
       usePresentationStore.getState().loadPresentation(createDefaultPresentation("horizontal"));
       window.history.replaceState({}, "", "/cinema-editor");
       return;
@@ -43,14 +45,20 @@ export default function CinemaEditor() {
 
     // Load template from URL param (e.g. ?template=pitch-profesional)
     if (templateId) {
-      // Search in all catalogs
       const allCatalog = [
         ...TEMPLATE_CATALOG,
         ...PREMIUM_TEMPLATE_CATALOG,
       ];
       const entry = allCatalog.find((t) => t.id === templateId);
       if (entry) {
-        usePresentationStore.getState().loadPresentation(entry.create());
+        setActiveScene("__reset__"); // clear stale ID before loading new presentation
+        const pres = entry.create();
+        // If addQuiz=true, attach a default quiz to the first scene
+        const addQuiz = params?.get("addQuiz") === "true";
+        if (addQuiz && pres.scenes.length > 0) {
+          pres.scenes[0] = { ...pres.scenes[0], quiz: createDefaultQuiz() };
+        }
+        usePresentationStore.getState().loadPresentation(pres);
         window.history.replaceState({}, "", "/cinema-editor");
         return;
       }
@@ -71,8 +79,10 @@ export default function CinemaEditor() {
   }, []);
 
   // --- Set first scene as active ---
+  // Also handles stale IDs from a previous presentation (template switch)
   useEffect(() => {
-    if (!activeSceneId && presentation.scenes.length > 0) {
+    const sceneExists = presentation.scenes.some((s) => s.id === activeSceneId);
+    if (!sceneExists && presentation.scenes.length > 0) {
       setActiveScene(presentation.scenes[0].id);
     }
   }, [activeSceneId, presentation.scenes, setActiveScene]);
