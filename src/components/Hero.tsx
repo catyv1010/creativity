@@ -26,9 +26,9 @@ const STAR_COLORS = [
 ];
 
 function MagneticButton({
-  children, className, href = "/cinema-editor",
+  children, className, href = "/cinema-editor", onClick,
 }: {
-  children: React.ReactNode; className?: string; href?: string;
+  children: React.ReactNode; className?: string; href?: string; onClick?: (e: React.MouseEvent) => void;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const x = useMotionValue(0);
@@ -43,7 +43,7 @@ function MagneticButton({
   };
   const onLeave = () => { x.set(0); y.set(0); };
   return (
-    <motion.a ref={ref} href={href} style={{ x: sx, y: sy }} onMouseMove={onMove} onMouseLeave={onLeave} className={className}>
+    <motion.a ref={ref} href={href} onClick={onClick} style={{ x: sx, y: sy }} onMouseMove={onMove} onMouseLeave={onLeave} className={className}>
       {children}
     </motion.a>
   );
@@ -150,8 +150,60 @@ export default function Hero() {
       ctx.fill();
     }
 
+    // Shooting stars
+    interface Shoot { x: number; y: number; len: number; speed: number; angle: number; color: string; alpha: number; life: number; maxLife: number; }
+    const shoots: Shoot[] = [];
+    const spawnShoot = () => {
+      const angle = (Math.random() * 40 + 20) * (Math.PI / 180); // 20–60°
+      shoots.push({
+        x: Math.random() * W * 0.7,
+        y: Math.random() * H * 0.4,
+        len: 80 + Math.random() * 120,
+        speed: 8 + Math.random() * 10,
+        angle,
+        color: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)],
+        alpha: 0,
+        life: 0,
+        maxLife: 40 + Math.random() * 30,
+      });
+    };
+    let shootTimer = 0;
+
     const ticker = gsap.ticker.add(() => {
       ctx.clearRect(0, 0, W, H);
+
+      // Spawn shooting star periodically
+      shootTimer++;
+      if (shootTimer > 120 + Math.random() * 180) { spawnShoot(); shootTimer = 0; }
+
+      // Draw shooting stars
+      for (let i = shoots.length - 1; i >= 0; i--) {
+        const s = shoots[i];
+        s.life++;
+        s.x += Math.cos(s.angle) * s.speed;
+        s.y += Math.sin(s.angle) * s.speed;
+        const progress = s.life / s.maxLife;
+        s.alpha = progress < 0.3 ? progress / 0.3 : 1 - (progress - 0.3) / 0.7;
+        if (s.life >= s.maxLife) { shoots.splice(i, 1); continue; }
+        const grad = ctx.createLinearGradient(s.x, s.y, s.x - Math.cos(s.angle) * s.len, s.y - Math.sin(s.angle) * s.len);
+        grad.addColorStop(0, s.color + Math.round(s.alpha * 220).toString(16).padStart(2, "0"));
+        grad.addColorStop(1, "transparent");
+        ctx.beginPath();
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = s.alpha;
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x - Math.cos(s.angle) * s.len, s.y - Math.sin(s.angle) * s.len);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        // Bright tip
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff";
+        ctx.globalAlpha = s.alpha * 0.9;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
 
       for (const s of stars) {
         // Twinkle
@@ -246,37 +298,37 @@ export default function Hero() {
           style={{ perspective: "800px" }}
         >
           {/* Giant C icon — same design as AnimatedLogo but huge */}
-          <div className="relative flex-shrink-0" style={{ width: 180, height: 180, transformStyle: "preserve-3d" }}>
+          <div className="relative flex-shrink-0" style={{ width: 240, height: 240, transformStyle: "preserve-3d" }}>
             {/* Outer diffuse glow */}
-            <div ref={outerGlowRef} className="absolute opacity-25" style={{
-              inset: -24, borderRadius: 40,
-              background: "radial-gradient(circle, rgba(192,132,252,0.18) 0%, rgba(56,189,248,0.14) 40%, rgba(52,211,153,0.1) 70%, transparent 90%)",
-              filter: "blur(28px)",
+            <div ref={outerGlowRef} className="absolute opacity-30" style={{
+              inset: -32, borderRadius: 52,
+              background: "radial-gradient(circle, rgba(192,132,252,0.22) 0%, rgba(56,189,248,0.16) 40%, rgba(52,211,153,0.1) 70%, transparent 90%)",
+              filter: "blur(36px)",
             }} />
             {/* Inner tight glow */}
-            <div ref={glowRef} className="absolute opacity-70" style={{
-              inset: -8, borderRadius: 32,
+            <div ref={glowRef} className="absolute opacity-75" style={{
+              inset: -10, borderRadius: 38,
               background: "linear-gradient(135deg, #e879f9, #a855f7, #6366f1, #06b6d4)",
-              filter: "blur(18px)",
+              filter: "blur(22px)",
             }} />
-            {/* Spinning conic gradient border */}
+            {/* Spinning conic gradient border — thicker */}
             <div ref={gradientRef} className="absolute" style={{
-              inset: -3, borderRadius: 28,
+              inset: -4, borderRadius: 34,
               background: "conic-gradient(from 0deg, #f0abfc, #c084fc, #818cf8, #38bdf8, #34d399, #fbbf24, #f472b6, #e879f9, #f0abfc)",
             }} />
             {/* Dark inner background */}
             <div className="absolute flex items-center justify-center" style={{
-              inset: 4, borderRadius: 24,
+              inset: 5, borderRadius: 30,
               background: "linear-gradient(145deg, #0d001f, #040010)",
             }}>
               <span className="font-[var(--font-display)] font-[900] select-none" style={{
-                fontSize: 108,
+                fontSize: 138,
                 lineHeight: 1,
                 background: "linear-gradient(135deg, #f0abfc 0%, #c084fc 35%, #818cf8 65%, #38bdf8 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-                filter: "drop-shadow(0 0 12px #c084fc) drop-shadow(0 0 28px #818cf8)",
+                filter: "drop-shadow(0 0 16px #c084fc) drop-shadow(0 0 36px #818cf8)",
               }}>C</span>
             </div>
           </div>
@@ -298,10 +350,39 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="font-[var(--font-display)] font-[800] leading-none tracking-[-0.02em] mb-10"
+          className="font-[var(--font-display)] font-[800] leading-none tracking-[-0.02em] mb-8"
           style={{ fontSize: "clamp(1.8rem, 5vw, 3.5rem)", color: "rgba(255,255,255,0.7)" }}
         >
           Crea sin límites
+        </motion.div>
+
+        {/* Floating stat pills */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1, duration: 0.8 }}
+          className="flex items-center justify-center gap-3 flex-wrap mb-10"
+        >
+          {[
+            { icon: "∞", label: "Canvas infinito", color: "#34d399" },
+            { icon: "✦", label: "8 transiciones cinemáticas", color: "#c084fc" },
+            { icon: "⚡", label: "IA Generativa", color: "#38bdf8" },
+            { icon: "🎬", label: "Exporta en HD", color: "#fb923c" },
+          ].map((pill, i) => (
+            <motion.div
+              key={i}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm"
+              style={{
+                background: `${pill.color}12`,
+                border: `1px solid ${pill.color}30`,
+                color: pill.color,
+              }}
+              animate={{ y: [0, -4, 0] }}
+              transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
+            >
+              <span style={{ fontSize: 11 }}>{pill.icon}</span>
+              {pill.label}
+            </motion.div>
+          ))}
         </motion.div>
 
         <motion.p
@@ -333,6 +414,11 @@ export default function Hero() {
 
           <MagneticButton
             href="#demo-video"
+            onClick={(e) => {
+              e.preventDefault();
+              const el = document.getElementById("demo-video");
+              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
             className="hoverable group relative px-8 py-5 rounded-2xl border border-white/10 font-bold text-lg overflow-hidden inline-block"
           >
             <span className="relative z-10 flex items-center gap-3 text-white/50 group-hover:text-white transition-colors duration-300">
