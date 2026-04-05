@@ -73,6 +73,24 @@ export interface Scene {
   backgroundBlur?: number;          // blur the background image
   transition: TransitionDescriptor;
   parallax?: ParallaxConfig;
+  quiz?: QuizData;                  // interactive quiz overlay for this scene
+}
+
+// --- QUIZ ---
+// Interactive quiz overlay rendered in Presenter when scene.quiz is set.
+
+export interface QuizData {
+  title: string;
+  questions: QuizQuestion[];
+}
+
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  options: string[];      // 2-4 options
+  correctIndex: number;   // 0-based index of correct option
+  timeLimit: number;      // seconds (e.g. 20)
+  points: number;         // points awarded for correct answer
 }
 
 // --- ELEMENTS ---
