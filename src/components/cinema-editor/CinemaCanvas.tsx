@@ -17,7 +17,7 @@ const SCENE_H = 1080;
 export default function CinemaCanvas() {
   const { activeSceneId, viewport, setViewport, tool, selectedElementIds, setSelection, clearSelection } =
     useCinemaEditorStore();
-  const { presentation, updateElement } = usePresentationStore();
+  const { presentation, updateElement, deleteElement } = usePresentationStore();
   const scene = presentation.scenes.find((s) => s.id === activeSceneId);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -101,6 +101,24 @@ export default function CinemaCanvas() {
   useEffect(() => {
     setEditingElementId(null);
   }, [activeSceneId]);
+
+  // Delete selected elements with Delete/Backspace key
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      // Don't delete when typing in an input or text editor
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || (e.target as HTMLElement)?.contentEditable === "true") return;
+      if ((e.key === "Delete" || e.key === "Backspace") && selectedElementIds.length > 0 && activeSceneId) {
+        e.preventDefault();
+        for (const id of selectedElementIds) {
+          deleteElement(activeSceneId, id);
+        }
+        clearSelection();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [selectedElementIds, activeSceneId, deleteElement, clearSelection]);
 
   // --- Element drag ---
   const onElementDragStart = useCallback(
