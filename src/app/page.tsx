@@ -26,7 +26,7 @@ export default function Home() {
       <CustomCursor />
       <MouseTooltip />
       <Navbar />
-      <HeroExplosive />
+      <Hero />
       <HeroVideo />
       <LiveDemo />
       <Marquee />
