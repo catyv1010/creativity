@@ -99,21 +99,27 @@ export default function Hero() {
           <span className="text-white/50 text-sm font-medium">Potenciado por Inteligencia Artificial</span>
         </motion.div>
 
-        {/* INTERACTIVE COLOR TEXT - Playground Paris style */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.6 }}
-          className="font-[var(--font-display)] text-[clamp(3.2rem,13vw,10rem)] font-[900] leading-[0.85] tracking-[-0.05em] mb-8">
-          <ColorText text="Crea" className="text-shimmer" baseColor="#c084fc" />
-          <br />
-          <ColorText text="sin limites" baseColor="rgba(255,255,255,0.9)" />
+        {/* Brand name — big */}
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }}
+          className="font-[var(--font-display)] font-[900] leading-none tracking-[-0.04em] mb-4"
+          style={{ fontSize: "clamp(4rem, 15vw, 12rem)" }}>
+          <ColorText text="Creativity" baseColor="#c084fc" />
         </motion.div>
 
-        <motion.p initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5, duration: 0.8 }}
-          className="text-base sm:text-lg md:text-xl text-white/35 max-w-xl mx-auto mb-14 font-light leading-relaxed">
+        {/* Tagline */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9, duration: 0.7 }}
+          className="font-[var(--font-display)] font-[900] leading-none tracking-[-0.03em] mb-10"
+          style={{ fontSize: "clamp(1.6rem, 5vw, 3.5rem)", color: "rgba(255,255,255,0.75)" }}>
+          Crea sin límites
+        </motion.div>
+
+        <motion.p initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4, duration: 0.8 }}
+          className="text-base sm:text-lg text-white/35 max-w-xl mx-auto mb-14 font-light leading-relaxed">
           La plataforma de presentaciones que <span className="text-white/60 font-medium">rompe con todo lo establecido</span>.
           <br className="hidden sm:block" />Canvas infinito. IA generativa. Transiciones cinematograficas.
         </motion.p>
 
-        <motion.div initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.8, duration: 0.8 }}
+        <motion.div initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.7, duration: 0.8 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-5">
           <MagneticButton className="hoverable group relative px-10 py-5 rounded-2xl bg-white text-black font-extrabold text-lg overflow-hidden inline-block">
             <span className="relative z-10 flex items-center gap-3 transition-colors duration-500 group-hover:text-white">
@@ -122,8 +128,12 @@ export default function Hero() {
             </span>
             <div className="absolute inset-0 bg-gradient-to-r from-coral to-magenta scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
           </MagneticButton>
-          <MagneticButton href="#canvas" className="hoverable px-8 py-5 rounded-2xl border border-white/10 text-white/50 hover:text-white hover:border-white/25 transition-all duration-300 font-bold inline-block hover:bg-white/[0.03]">
-            Ver demo en vivo
+          <MagneticButton href="#demo-video" className="hoverable group relative px-8 py-5 rounded-2xl border border-white/10 font-bold text-lg overflow-hidden inline-block">
+            <span className="relative z-10 flex items-center gap-3 text-white/50 group-hover:text-white transition-colors duration-300">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polygon points="10,8 16,12 10,16" fill="currentColor" /></svg>
+              Despierta tu creatividad
+            </span>
+            <div className="absolute inset-0 bg-white/[0.03] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-2xl" />
           </MagneticButton>
         </motion.div>
       </div>

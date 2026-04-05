@@ -66,7 +66,7 @@ export default function HeroVideo() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[200vh] bg-[#030014]">
+    <section id="demo-video" ref={sectionRef} className="relative h-[200vh] bg-[#030014]">
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden" style={{ perspective: "1200px" }}>
         <div
           ref={frameRef}
