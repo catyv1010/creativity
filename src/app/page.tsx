@@ -2,6 +2,7 @@ import CustomCursor from "@/components/CustomCursor";
 import MouseTooltip from "@/components/MouseTooltip";
 import GSAPLanding from "@/components/GSAPLanding";
 import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
 import HeroExplosive from "@/components/HeroExplosive";
 import HeroVideo from "@/components/HeroVideo";
 import LiveDemo from "@/components/LiveDemo";
@@ -25,7 +26,7 @@ export default function Home() {
       <CustomCursor />
       <MouseTooltip />
       <Navbar />
-      <HeroExplosive />
+      <Hero />
       <HeroVideo />
       <LiveDemo />
       <Marquee />

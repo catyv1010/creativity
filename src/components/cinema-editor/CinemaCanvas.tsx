@@ -246,20 +246,56 @@ export default function CinemaCanvas() {
   return (
     <div
       ref={containerRef}
-      className="flex-1 flex items-center justify-center bg-[#1a1a2e] relative overflow-hidden"
-      style={{ cursor: tool === "pan" ? "grab" : "default" }}
+      className="flex-1 flex items-center justify-center relative overflow-hidden"
+      style={{
+        cursor: tool === "pan" ? "grab" : "default",
+        background: "radial-gradient(ellipse at 50% 40%, #1e1b3a 0%, #0f0e1a 60%, #080812 100%)",
+      }}
       onWheel={onWheel}
       onPointerDown={onCanvasClick}
       data-canvas="true"
     >
-      {/* Subtle background pattern — NOT scrollable */}
+      {/* Fine dot-grid background */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
+          backgroundImage:
+            "radial-gradient(circle, rgba(139,92,246,0.15) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
         }}
       />
+      {/* Subtle vignette at edges */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 60%, rgba(0,0,0,0.5) 100%)",
+        }}
+      />
+      {/* Corner glow accents */}
+      <div className="absolute top-0 left-0 w-64 h-64 pointer-events-none"
+        style={{ background: "radial-gradient(circle at top left, rgba(124,58,237,0.08) 0%, transparent 70%)" }} />
+      <div className="absolute bottom-0 right-0 w-64 h-64 pointer-events-none"
+        style={{ background: "radial-gradient(circle at bottom right, rgba(236,72,153,0.06) 0%, transparent 70%)" }} />
+
+      {/* Zoom level indicator */}
+      <div className="absolute bottom-4 right-4 flex items-center gap-2 z-20 pointer-events-none">
+        <div className="px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold"
+          style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.3)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          {Math.round(viewport.zoom * 100)}%
+        </div>
+        <div className="px-2.5 py-1 rounded-md text-[11px] font-semibold"
+          style={{ background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          {SCENE_W} × {SCENE_H}
+        </div>
+      </div>
+
+      {/* Scene name label above canvas */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+        <div className="px-3 py-1 rounded-full text-[11px] font-medium"
+          style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.25)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          {scene.name}
+        </div>
+      </div>
 
       {/* Scene — always centered via flexbox */}
       <div
@@ -269,19 +305,28 @@ export default function CinemaCanvas() {
           transformOrigin: "center center",
         }}
       >
-        {/* Shadow behind scene */}
+        {/* Glow behind scene */}
         <div
-          className="absolute -inset-2 bg-black/30 blur-xl rounded-xl pointer-events-none"
+          className="absolute pointer-events-none"
+          style={{
+            inset: "-40px",
+            background: `radial-gradient(ellipse, ${scene.backgroundColor}55 0%, transparent 70%)`,
+            filter: "blur(30px)",
+          }}
         />
+        {/* Hard shadow */}
+        <div className="absolute -inset-4 rounded-2xl pointer-events-none"
+          style={{ boxShadow: "0 30px 80px rgba(0,0,0,0.7), 0 8px 24px rgba(0,0,0,0.5)" }} />
 
         {/* The actual scene */}
         <div
-          className="relative rounded-md overflow-hidden"
+          className="relative rounded-lg overflow-hidden"
           style={{
             width: SCENE_W,
             height: SCENE_H,
             backgroundColor: scene.backgroundColor,
-            boxShadow: "0 8px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)",
+            boxShadow: "0 0 0 1px rgba(255,255,255,0.08), 0 0 0 3px rgba(0,0,0,0.3)",
+            outline: "none",
           }}
         >
           {/* Background image layer */}
@@ -375,31 +420,30 @@ export default function CinemaCanvas() {
         </div>
       </div>
 
-      {/* Scene name badge */}
-      <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-sm border border-white/5 z-10">
-        <span className="text-white/40 text-xs font-medium">{scene.name}</span>
-      </div>
-
-      {/* Zoom controls */}
-      <div className="absolute bottom-4 right-4 flex items-center gap-2 z-20">
+      {/* Zoom controls — bottom left */}
+      <div className="absolute bottom-4 left-4 flex items-center gap-1.5 z-20">
         <button
           onClick={() => setViewport({ zoom: Math.max(0.15, viewport.zoom - 0.1) })}
-          className="w-7 h-7 rounded bg-white/5 border border-white/10 text-white/40 text-sm flex items-center justify-center hover:bg-white/10 cursor-pointer"
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-white/40 hover:text-white/70 text-sm transition-colors cursor-pointer"
+          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
         >
           −
         </button>
-        <span className="text-white/30 text-xs font-mono min-w-[3rem] text-center">
+        <span className="text-white/30 text-[11px] font-mono px-2 py-1 rounded-lg"
+          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
           {Math.round(viewport.zoom * 100)}%
         </span>
         <button
           onClick={() => setViewport({ zoom: Math.min(1.5, viewport.zoom + 0.1) })}
-          className="w-7 h-7 rounded bg-white/5 border border-white/10 text-white/40 text-sm flex items-center justify-center hover:bg-white/10 cursor-pointer"
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-white/40 hover:text-white/70 text-sm transition-colors cursor-pointer"
+          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
         >
           +
         </button>
         <button
           onClick={fitToView}
-          className="px-2 h-7 rounded bg-white/5 border border-white/10 text-white/30 text-[10px] hover:bg-white/10 cursor-pointer"
+          className="px-3 h-7 rounded-lg text-white/30 hover:text-white/60 text-[10px] font-medium transition-colors cursor-pointer"
+          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
         >
           Ajustar
         </button>

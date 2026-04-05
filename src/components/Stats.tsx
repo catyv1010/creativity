@@ -7,7 +7,7 @@ const FEATURES = [
   { icon: "🎬", value: "8+", label: "Transiciones", desc: "dolly-zoom, iris, whip-pan..." },
   { icon: "✦", value: "20+", label: "Animaciones", desc: "GSAP presets cinematográficos" },
   { icon: "∞", value: "∞", label: "Canvas", desc: "espacio infinito 2D / 3D" },
-  { icon: "⚡", value: "0", label: "Límites", desc: "de escenas o elementos" },
+  { icon: "🎮", value: "Quiz", label: "Interactivo", desc: "gamificación en tu presentación" },
 ];
 
 export default function Stats() {
