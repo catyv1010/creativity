@@ -189,10 +189,46 @@ export const CinemaSceneRenderer = memo(function CinemaSceneRenderer({
         height: height * zoom,
         position: "relative",
         overflow: "hidden",
-        background: scene.backgroundGradient || scene.backgroundColor,
+        backgroundColor: scene.backgroundColor,
         transformOrigin: "0 0",
       }}
     >
+      {/* Background image layer — fills the scaled container */}
+      {scene.backgroundImage && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: `url(${scene.backgroundImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            zIndex: 0,
+          }}
+        />
+      )}
+      {/* Background overlay (dark tint over photo) */}
+      {scene.backgroundOverlay && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundColor: scene.backgroundOverlay,
+            zIndex: 1,
+          }}
+        />
+      )}
+      {/* Background gradient layer */}
+      {scene.backgroundGradient && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: scene.backgroundGradient,
+            zIndex: 2,
+          }}
+        />
+      )}
+      {/* Elements scaled from 1920×1080 */}
       <div
         style={{
           width,
@@ -202,6 +238,7 @@ export const CinemaSceneRenderer = memo(function CinemaSceneRenderer({
           position: "absolute",
           top: 0,
           left: 0,
+          zIndex: 3,
         }}
       >
         {sortedElements.map((element) => (
