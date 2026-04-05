@@ -310,12 +310,12 @@ function PreviewMinimalista() {
 }
 
 const TEMPLATES = [
-  { name: "Pitch Deck", category: "Negocios", badge: "Popular", badgeColor: "#c084fc", accent: "#c084fc", Preview: PreviewPitchDeck, href: "/cinema-editor" },
-  { name: "Neon Cyberpunk", category: "Creativo", badge: "Futurista", badgeColor: "#06b6d4", accent: "#06b6d4", Preview: PreviewNeonCyberpunk, href: "/cinema-editor" },
-  { name: "Educación Moderna", category: "Educación", badge: "Nuevo", badgeColor: "#34d399", accent: "#34d399", Preview: PreviewEducacion, href: "/cinema-editor" },
-  { name: "Portfolio Artista", category: "Portfolio", badge: "Premium", badgeColor: "#f472b6", accent: "#f472b6", Preview: PreviewPortfolio, href: "/cinema-editor" },
-  { name: "Startup Launch", category: "Negocios", badge: "Hot", badgeColor: "#fb923c", accent: "#fb923c", Preview: PreviewStartup, href: "/cinema-editor" },
-  { name: "Minimalista Pro", category: "Creativo", badge: "Elegante", badgeColor: "#818cf8", accent: "#818cf8", Preview: PreviewMinimalista, href: "/cinema-editor" },
+  { name: "Pitch Deck", category: "Negocios", badge: "Popular", badgeColor: "#c084fc", accent: "#c084fc", Preview: PreviewPitchDeck, href: "/cinema-editor?template=pitch-profesional" },
+  { name: "Neon Cyberpunk", category: "Creativo", badge: "Futurista", badgeColor: "#06b6d4", accent: "#06b6d4", Preview: PreviewNeonCyberpunk, href: "/cinema-editor?template=efectos-showcase" },
+  { name: "Educación Moderna", category: "Educación", badge: "Nuevo", badgeColor: "#34d399", accent: "#34d399", Preview: PreviewEducacion, href: "/cinema-editor?template=parallax-story" },
+  { name: "Portfolio Artista", category: "Portfolio", badge: "Premium", badgeColor: "#f472b6", accent: "#f472b6", Preview: PreviewPortfolio, href: "/cinema-editor?template=agencia-creativa" },
+  { name: "Startup Launch", category: "Negocios", badge: "Hot", badgeColor: "#fb923c", accent: "#fb923c", Preview: PreviewStartup, href: "/cinema-editor?template=epic-reveal" },
+  { name: "Minimalista Pro", category: "Creativo", badge: "Elegante", badgeColor: "#818cf8", accent: "#818cf8", Preview: PreviewMinimalista, href: "/cinema-editor?template=noir-spotlight" },
 ];
 
 export default function Templates() {

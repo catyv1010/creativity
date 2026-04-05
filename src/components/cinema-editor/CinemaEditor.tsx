@@ -7,6 +7,8 @@ import { useHistoryStore } from "@/store/historyStore";
 import { savePresentation, loadPresentation as loadFromStorage, getLastPresentationId } from "@/lib/persistence";
 import { createDefaultPresentation } from "@/core/scene/SceneFactory";
 import { registerGSAPPlugins } from "@/lib/gsap-register";
+import { TEMPLATE_CATALOG } from "@/core/scene/templates";
+import { PREMIUM_TEMPLATE_CATALOG } from "@/core/scene/premium-templates";
 import CinemaToolbar from "./CinemaToolbar";
 import CinemaScenePanel from "./CinemaScenePanel";
 import CinemaCanvas from "./CinemaCanvas";
@@ -29,12 +31,31 @@ export default function CinemaEditor() {
 
   // --- Load presentation on mount ---
   useEffect(() => {
-    const isNew = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("new") === "1";
+    const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+    const isNew = params?.get("new") === "1";
+    const templateId = params?.get("template");
+
     if (isNew) {
       usePresentationStore.getState().loadPresentation(createDefaultPresentation("horizontal"));
       window.history.replaceState({}, "", "/cinema-editor");
       return;
     }
+
+    // Load template from URL param (e.g. ?template=pitch-profesional)
+    if (templateId) {
+      // Search in all catalogs
+      const allCatalog = [
+        ...TEMPLATE_CATALOG,
+        ...PREMIUM_TEMPLATE_CATALOG,
+      ];
+      const entry = allCatalog.find((t) => t.id === templateId);
+      if (entry) {
+        usePresentationStore.getState().loadPresentation(entry.create());
+        window.history.replaceState({}, "", "/cinema-editor");
+        return;
+      }
+    }
+
     // Intenta cargar la última presentación guardada;
     // si no hay ninguna, usa la nueva presentación espectacular
     const lastId = getLastPresentationId();
