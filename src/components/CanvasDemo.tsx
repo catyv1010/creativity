@@ -11,8 +11,8 @@ export default function CanvasDemo() {
   const mockupY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
-    <section id="canvas" ref={cRef} className="relative py-32 px-6 overflow-hidden bg-[#eef8f3]">
-      <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(rgba(6,150,120,0.06) 1px, transparent 1px)", backgroundSize: "26px 26px" }} />
+    <section id="canvas" ref={cRef} className="relative py-32 px-6 overflow-hidden" style={{ background: "linear-gradient(180deg, #030014 0%, #05001a 50%, #030014 100%)" }}>
+      <div className="absolute inset-0 pointer-events-none opacity-[0.025]" style={{ backgroundImage: "linear-gradient(rgba(52,211,153,1) 1px, transparent 1px), linear-gradient(90deg, rgba(52,211,153,1) 1px, transparent 1px)", backgroundSize: "80px 80px" }} />
 
       <div ref={ref} className="max-w-6xl mx-auto relative z-10">
         <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.8 }} className="text-center mb-14">
@@ -20,21 +20,21 @@ export default function CanvasDemo() {
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
             <span className="text-emerald-700/50 text-xs font-bold uppercase tracking-[0.2em]">Editor</span>
           </div>
-          <h2 className="font-[var(--font-display)] text-4xl sm:text-5xl md:text-7xl font-[900] tracking-tight mb-6 text-[#0a2020]">
-            Canvas<br /><span className="relative inline-block"><span className="text-emerald-600">Infinito</span>
+          <h2 className="font-[var(--font-display)] text-4xl sm:text-5xl md:text-7xl font-[900] tracking-tight mb-6" style={{ color: "#f0e6ff" }}>
+            Canvas<br /><span className="relative inline-block"><span style={{ color: "#34d399" }}>Infinito</span>
               <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 10" fill="none"><path d="M4 8C50 2,150 2,196 8" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" /></svg>
             </span>
           </h2>
-          <p className="text-[#0a2020]/35 text-lg max-w-md mx-auto">Olvida las slides lineales. Navega libre por un espacio sin limites.</p>
+          <p className="text-lg max-w-md mx-auto" style={{ color: "rgba(240,230,255,0.4)" }}>Olvida las slides lineales. Navega libre por un espacio sin limites.</p>
         </motion.div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-14 max-w-2xl mx-auto">
           {[{ n: "\u221E", l: "Canvas" }, { n: "100+", l: "Plantillas" }, { n: "30+", l: "Transiciones" }, { n: "60", l: "FPS" }].map((s, i) => (
             <motion.div key={i} initial={{ opacity: 0, scale: 0.8 }} animate={inView ? { opacity: 1, scale: 1 } : {}} transition={{ delay: 0.3 + i * 0.1, type: "spring" }}
-              whileHover={{ scale: 1.05 }} className="bg-white rounded-lg p-4 text-center shadow-[0_1px_8px_rgba(0,0,0,0.03)] border border-emerald-700/5">
-              <div className="font-[var(--font-display)] text-2xl font-[900] text-[#0a2020]">{s.n}</div>
-              <div className="text-[#0a2020]/30 text-[10px] mt-0.5 font-bold uppercase tracking-wider">{s.l}</div>
+              whileHover={{ scale: 1.05 }} className="rounded-lg p-4 text-center" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(52,211,153,0.15)" }}>
+              <div className="font-[var(--font-display)] text-2xl font-[900]" style={{ color: "#34d399" }}>{s.n}</div>
+              <div className="text-[10px] mt-0.5 font-bold uppercase tracking-wider" style={{ color: "rgba(240,230,255,0.3)" }}>{s.l}</div>
             </motion.div>
           ))}
         </div>

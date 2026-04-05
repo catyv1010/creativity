@@ -70,8 +70,8 @@ export default function Gamification() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="relative py-32 px-6 overflow-hidden bg-[#fef4e8]">
-      <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(rgba(200,150,50,0.04) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+    <section className="relative py-32 px-6 overflow-hidden" style={{ background: "linear-gradient(180deg, #030014 0%, #08001a 50%, #030014 100%)" }}>
+      <div className="absolute inset-0 pointer-events-none opacity-[0.025]" style={{ backgroundImage: "linear-gradient(rgba(251,146,60,1) 1px, transparent 1px), linear-gradient(90deg, rgba(251,146,60,1) 1px, transparent 1px)", backgroundSize: "80px 80px" }} />
 
       <motion.svg className="absolute top-[8%] left-[5%] w-20 h-20 opacity-[0.04] pointer-events-none" viewBox="0 0 80 80" fill="none"
         animate={{ rotate: -360 }} transition={{ duration: 35, repeat: Infinity, ease: "linear" }}>
@@ -85,15 +85,15 @@ export default function Gamification() {
             <div className="w-1.5 h-1.5 rounded-full bg-amber-600" />
             <span className="text-amber-700/60 text-xs font-bold uppercase tracking-[0.2em]">Gamificacion</span>
           </motion.div>
-          <h2 className="font-[var(--font-display)] text-4xl sm:text-5xl md:text-7xl font-[900] tracking-tight mb-6 text-[#1a1000]">
+          <h2 className="font-[var(--font-display)] text-4xl sm:text-5xl md:text-7xl font-[900] tracking-tight mb-6" style={{ color: "#f0e6ff" }}>
             Aprende<br />
-            <span className="relative inline-block"><span className="text-amber-600">jugando</span>
+            <span className="relative inline-block"><span style={{ color: "#fb923c" }}>jugando</span>
               <motion.svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 10" fill="none" initial={{ pathLength: 0 }} animate={inView ? { pathLength: 1 } : {}} transition={{ delay: 0.5, duration: 0.8 }}>
                 <motion.path d="M4 8C50 2,150 2,196 8" stroke="#d97706" strokeWidth="2.5" strokeLinecap="round" />
               </motion.svg>
             </span>
           </h2>
-          <p className="text-[#1a1000]/35 text-lg max-w-lg mx-auto">Escape rooms, quizzes y juegos de memoria que transforman cualquier contenido en una aventura.</p>
+          <p className="text-lg max-w-lg mx-auto" style={{ color: "rgba(240,230,255,0.4)" }}>Escape rooms, quizzes y juegos de memoria que transforman cualquier contenido en una aventura.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
