@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import HeroExplosive from "@/components/HeroExplosive";
 import HeroVideo from "@/components/HeroVideo";
+import PresentationsShowcase from "@/components/PresentationsShowcase";
 import LiveDemo from "@/components/LiveDemo";
 import Marquee from "@/components/Marquee";
 import AIFeatures from "@/components/AIFeatures";
@@ -27,6 +28,7 @@ export default function Home() {
       <MouseTooltip />
       <Navbar />
       <Hero />
+      <PresentationsShowcase />
       <HeroVideo />
       <LiveDemo />
       <Marquee />
