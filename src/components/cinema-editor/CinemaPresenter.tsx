@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import { usePresentationStore } from "@/store/presentationStore";
 import { useCinemaEditorStore } from "@/store/cinemaEditorStore";
@@ -10,6 +11,7 @@ import { InteractionSystem } from "@/core/animation/InteractionSystem";
 import { ANIMATION_PRESETS, type AnimationPresetKey } from "@/core/animation/easing-presets";
 import type { Presentation, Scene, SceneElement, AnimationDescriptor, ElementContent as ContentType } from "@/core/types";
 import * as LucideIcons from "lucide-react";
+import QuizOverlay from "./QuizOverlay";
 
 registerGSAPPlugins();
 
@@ -33,6 +35,7 @@ export default function CinemaPresenter() {
   const animTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
   const { scenes } = presentation;
 
   // Calculate scale to fit viewport
@@ -218,9 +221,21 @@ export default function CinemaPresenter() {
     playNext();
   }, [currentIndex, scenes, animateSceneElements]);
 
+  // Hide quiz when navigating to a different scene
+  const goToSceneWithQuizReset = useCallback(
+    (index: number) => {
+      setShowQuiz(false);
+      goToScene(index);
+    },
+    [goToScene]
+  );
+
   // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      // When quiz is open, let QuizOverlay handle Escape/Space/Enter — don't nav slides
+      if (showQuiz) return;
+
       switch (e.key) {
         case "Escape":
           setPresentMode(false);
@@ -228,14 +243,19 @@ export default function CinemaPresenter() {
         case "ArrowRight":
         case " ":
           e.preventDefault();
-          goToScene(currentIndex + 1);
+          goToSceneWithQuizReset(currentIndex + 1);
           break;
         case "ArrowLeft":
           e.preventDefault();
-          goToScene(currentIndex - 1);
+          goToSceneWithQuizReset(currentIndex - 1);
           break;
         case "Enter":
           playAll();
+          break;
+        case "q":
+        case "Q":
+          // Q to launch quiz on current scene (if it has one)
+          if (scenes[currentIndex]?.quiz) setShowQuiz(true);
           break;
       }
     };
@@ -247,12 +267,15 @@ export default function CinemaPresenter() {
       window.removeEventListener("keydown", handler);
       document.exitFullscreen?.().catch(() => {});
     };
-  }, [currentIndex, goToScene, playAll, setPresentMode]);
+  }, [currentIndex, goToSceneWithQuizReset, playAll, setPresentMode, showQuiz, scenes]);
+
+  const currentScene = scenes[currentIndex];
+  const hasQuiz = !!currentScene?.quiz;
 
   return (
     <div
       className="fixed inset-0 bg-black z-[9999] overflow-hidden"
-      onClick={() => goToScene(currentIndex + 1)}
+      onClick={() => { if (!showQuiz) goToSceneWithQuizReset(currentIndex + 1); }}
     >
       {/* Viewport — perspective container */}
       <div
@@ -359,7 +382,7 @@ export default function CinemaPresenter() {
           {scenes.map((s, i) => (
             <button
               key={s.id}
-              onClick={(e) => { e.stopPropagation(); goToScene(i); }}
+              onClick={(e) => { e.stopPropagation(); goToSceneWithQuizReset(i); }}
               className={`transition-all duration-300 rounded-full cursor-pointer ${
                 i === currentIndex
                   ? "w-8 h-2.5 bg-gradient-to-r from-purple-500 to-pink-500"
@@ -370,6 +393,20 @@ export default function CinemaPresenter() {
             />
           ))}
         </div>
+
+        {/* Quiz launch button — only shown when current scene has a quiz */}
+        <AnimatePresence>
+          {hasQuiz && !showQuiz && (
+            <button
+              onClick={(e) => { e.stopPropagation(); setShowQuiz(true); }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-purple-600/80 hover:bg-purple-500/90 backdrop-blur-md border border-purple-400/30 cursor-pointer transition-all hover:scale-105 active:scale-95"
+              title="Lanzar quiz (Q)"
+            >
+              <span className="text-white text-sm">🎯</span>
+              <span className="text-white text-xs font-semibold tracking-wide">Lanzar Quiz</span>
+            </button>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Scene counter */}
@@ -379,7 +416,7 @@ export default function CinemaPresenter() {
 
       {/* Tip */}
       <div className="absolute top-4 left-4 text-white/10 text-[10px] font-mono z-10">
-        ← → navegar · Enter auto-play · Esc salir
+        ← → navegar · Enter auto-play · {hasQuiz ? "Q quiz · " : ""}Esc salir
       </div>
 
       {/* Exit */}
@@ -389,6 +426,16 @@ export default function CinemaPresenter() {
       >
         ESC
       </button>
+
+      {/* Quiz overlay — rendered OUTSIDE the scale/3D hierarchy */}
+      <AnimatePresence>
+        {showQuiz && currentScene?.quiz && (
+          <QuizOverlay
+            quiz={currentScene.quiz}
+            onClose={() => setShowQuiz(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

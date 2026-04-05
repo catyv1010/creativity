@@ -15,11 +15,13 @@ import {
   FileText,
   ChevronDown,
   Loader2,
+  Gamepad2,
 } from "lucide-react";
 import { useCinemaEditorStore } from "@/store/cinemaEditorStore";
 import { usePresentationStore } from "@/store/presentationStore";
 import { useHistoryStore } from "@/store/historyStore";
 import ImageUploadButton from "./ImageUploadButton";
+import { createDefaultQuiz } from "./QuizOverlay";
 import { useState, useRef, useEffect } from "react";
 
 const COLOR_SWATCHES = [
@@ -79,7 +81,7 @@ export default function CinemaToolbar({ onOpenTemplates, onOpenMedia }: { onOpen
     activeSceneId,
   } = useCinemaEditorStore();
 
-  const { presentation, addTextElement, addShapeElement } =
+  const { presentation, addTextElement, addShapeElement, updateScene } =
     usePresentationStore();
 
   // Export dropdown state
@@ -189,6 +191,24 @@ export default function CinemaToolbar({ onOpenTemplates, onOpenMedia }: { onOpen
           <Triangle size={16} />
         </ToolButton>
         <ImageUploadButton />
+        <ToolButton
+          onClick={() => {
+            if (!activeSceneId) return;
+            const scene = presentation.scenes.find((s) => s.id === activeSceneId);
+            if (!scene) return;
+            if (scene.quiz) {
+              // Remove quiz from scene
+              updateScene(activeSceneId, { quiz: undefined });
+            } else {
+              // Add default quiz to scene
+              updateScene(activeSceneId, { quiz: createDefaultQuiz() });
+            }
+          }}
+          active={!!presentation.scenes.find((s) => s.id === activeSceneId)?.quiz}
+          title="Agregar / quitar Quiz interactivo en esta escena"
+        >
+          <Gamepad2 size={16} />
+        </ToolButton>
 
         <Separator />
 

@@ -31,4 +31,6 @@ export type {
   TransitionDescriptor,
   ParallaxConfig,
   ParallaxLayer,
+  QuizData,
+  QuizQuestion,
 } from "./presentation";
