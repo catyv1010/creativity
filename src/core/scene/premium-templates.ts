@@ -490,8 +490,16 @@ export function createNaturalezaInmersiva(): Presentation {
 // CATALOG
 // =====================================================================
 import { createAgenciaCreativa } from "./agencia-creativa";
+import { createVibrante } from "./vibrante";
 
 export const PREMIUM_TEMPLATE_CATALOG = [
+  {
+    id: "vibrante",
+    name: "Vibrante",
+    description: "5 escenas con paletas de color espectaculares: fuego, océano, bosque, aurora y cosmos",
+    preview: "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=600&q=80",
+    create: createVibrante,
+  },
   {
     id: "pitch-profesional",
     name: "Pitch Profesional",
